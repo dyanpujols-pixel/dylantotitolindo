@@ -1,220 +1,257 @@
--- dylantotitolindo
--- Made by Daniel
--- Enhanced UI Version
+--// dylantotitolindo 💀
+--// Made by Daniel
 
 local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
 local player = Players.LocalPlayer
 
-local predictionEnabled = true
-local homeRunEnabled = false
-local guiVisible = true
+local Prediction = true
+local HomeRun = false
 
+local RED = Color3.fromRGB(220, 0, 0)
+local DARK = Color3.fromRGB(18, 18, 18)
+local DARK2 = Color3.fromRGB(28, 28, 28)
+local WHITE = Color3.fromRGB(255, 255, 255)
+
+-- GUI
 local gui = Instance.new("ScreenGui")
 gui.Name = "dylantotitolindo"
 gui.ResetOnSpawn = false
 gui.Parent = player:WaitForChild("PlayerGui")
 
--- Main frame with better styling
-local frame = Instance.new("Frame")
-frame.Size = UDim2.fromOffset(300, 250)
-frame.Position = UDim2.new(.5, -150, .5, -125)
-frame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-frame.BorderSizePixel = 0
-frame.Parent = gui
+-- OPEN BUTTON
+local open = Instance.new("TextButton")
+open.Size = UDim2.fromOffset(58, 58)
+open.Position = UDim2.new(0, 20, .5, -29)
+open.BackgroundColor3 = RED
+open.Text = "💀"
+open.TextScaled = true
+open.TextColor3 = WHITE
+open.BorderSizePixel = 0
+open.Visible = false
+open.Parent = gui
 
--- Add corner radius
+local openCorner = Instance.new("UICorner")
+openCorner.CornerRadius = UDim.new(1, 0)
+openCorner.Parent = open
+
+-- MAIN
+local main = Instance.new("Frame")
+main.Size = UDim2.fromOffset(310, 245)
+main.Position = UDim2.new(.5, -155, .5, -122)
+main.BackgroundColor3 = DARK
+main.BorderSizePixel = 0
+main.Parent = gui
+
 local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 12)
-corner.Parent = frame
+corner.CornerRadius = UDim.new(0, 14)
+corner.Parent = main
 
--- Add shadow effect
-local shadow = Instance.new("Frame")
-shadow.Size = UDim2.new(1, 8, 1, 8)
-shadow.Position = UDim2.new(0, -4, 0, -4)
-shadow.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-shadow.BorderSizePixel = 0
-shadow.ZIndex = -1
-shadow.Parent = frame
-local shadowCorner = Instance.new("UICorner")
-shadowCorner.CornerRadius = UDim.new(0, 16)
-shadowCorner.Parent = shadow
+local stroke = Instance.new("UIStroke")
+stroke.Color = RED
+stroke.Thickness = 2
+stroke.Parent = main
 
--- Header frame
+-- HEADER
 local header = Instance.new("Frame")
-header.Size = UDim2.new(1, 0, 0, 50)
-header.BackgroundColor3 = Color3.fromRGB(190, 0, 0)
+header.Size = UDim2.new(1, 0, 0, 65)
+header.BackgroundColor3 = RED
 header.BorderSizePixel = 0
-header.Parent = frame
+header.Parent = main
 
 local headerCorner = Instance.new("UICorner")
-headerCorner.CornerRadius = UDim.new(0, 12)
+headerCorner.CornerRadius = UDim.new(0, 14)
 headerCorner.Parent = header
 
--- Title
+local skull = Instance.new("TextLabel")
+skull.Size = UDim2.fromOffset(55, 55)
+skull.Position = UDim2.fromOffset(8, 5)
+skull.BackgroundTransparency = 1
+skull.Text = "💀"
+skull.TextScaled = true
+skull.Parent = header
+
 local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, -50, 1, 0)
+title.Size = UDim2.new(1, -110, 0, 32)
+title.Position = UDim2.fromOffset(65, 5)
 title.BackgroundTransparency = 1
 title.Text = "dylantotitolindo"
-title.TextColor3 = Color3.new(1, 1, 1)
+title.TextColor3 = WHITE
 title.TextScaled = true
 title.Font = Enum.Font.GothamBold
+title.TextXAlignment = Enum.TextXAlignment.Left
 title.Parent = header
 
--- Close button
-local closeButton = Instance.new("TextButton")
-closeButton.Size = UDim2.fromOffset(40, 40)
-closeButton.Position = UDim2.new(1, -45, 0, 5)
-closeButton.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
-closeButton.TextColor3 = Color3.new(1, 1, 1)
-closeButton.TextScaled = true
-closeButton.Font = Enum.Font.GothamBold
-closeButton.Text = "×"
-closeButton.Parent = header
+local made = Instance.new("TextLabel")
+made.Size = UDim2.new(1, -110, 0, 22)
+made.Position = UDim2.fromOffset(66, 37)
+made.BackgroundTransparency = 1
+made.Text = "Made by Daniel"
+made.TextColor3 = WHITE
+made.TextScaled = true
+made.TextXAlignment = Enum.TextXAlignment.Left
+made.Parent = header
+
+-- CLOSE
+local close = Instance.new("TextButton")
+close.Size = UDim2.fromOffset(38, 38)
+close.Position = UDim2.new(1, -47, 0, 13)
+close.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
+close.Text = "×"
+close.TextColor3 = WHITE
+close.TextScaled = true
+close.Font = Enum.Font.GothamBold
+close.Parent = header
+
 local closeCorner = Instance.new("UICorner")
-closeCorner.CornerRadius = UDim.new(0, 8)
-closeCorner.Parent = closeButton
+closeCorner.CornerRadius = UDim.new(0, 10)
+closeCorner.Parent = close
 
--- Content frame
-local content = Instance.new("Frame")
-content.Size = UDim2.new(1, 0, 1, -50)
-content.Position = UDim2.new(0, 0, 0, 50)
-content.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
-content.BorderSizePixel = 0
-content.Parent = frame
+-- STATUS
+local status = Instance.new("TextLabel")
+status.Size = UDim2.new(1, -30, 0, 25)
+status.Position = UDim2.fromOffset(15, 75)
+status.BackgroundTransparency = 1
+status.Text = "⚡ FEATURES"
+status.TextColor3 = RED
+status.TextSize = 16
+status.Font = Enum.Font.GothamBold
+status.TextXAlignment = Enum.TextXAlignment.Left
+status.Parent = main
 
-local contentCorner = Instance.new("UICorner")
-contentCorner.CornerRadius = UDim.new(0, 10)
-contentCorner.Parent = content
-
--- Credit label
-local credit = Instance.new("TextLabel")
-credit.Size = UDim2.new(1, 0, 0, 25)
-credit.Position = UDim2.fromOffset(0, 10)
-credit.BackgroundTransparency = 1
-credit.Text = "Made by Daniel"
-credit.TextColor3 = Color3.fromRGB(200, 200, 200)
-credit.TextScaled = true
-credit.Font = Enum.Font.Gotham
-credit.Parent = content
-
--- Utility function to create enhanced buttons
-local function createToggleButton(text, y, callback)
-    local buttonContainer = Instance.new("Frame")
-    buttonContainer.Size = UDim2.new(0.9, 0, 0, 50)
-    buttonContainer.Position = UDim2.new(0.05, 0, 0, y)
-    buttonContainer.BackgroundTransparency = 1
-    buttonContainer.Parent = content
-
+-- BUTTON FUNCTION
+local function makeButton(text, y)
     local button = Instance.new("TextButton")
-    button.Size = UDim2.new(1, 0, 1, 0)
-    button.BackgroundColor3 = Color3.fromRGB(60, 60, 80)
-    button.TextColor3 = Color3.new(1, 1, 1)
-    button.TextScaled = true
-    button.Font = Enum.Font.GothamSemibold
+    button.Size = UDim2.new(1, -30, 0, 50)
+    button.Position = UDim2.fromOffset(15, y)
+    button.BackgroundColor3 = DARK2
+    button.TextColor3 = WHITE
     button.Text = text
-    button.Parent = buttonContainer
+    button.TextSize = 17
+    button.Font = Enum.Font.GothamBold
+    button.BorderSizePixel = 0
+    button.Parent = main
 
-    local buttonCorner = Instance.new("UICorner")
-    buttonCorner.CornerRadius = UDim.new(0, 8)
-    buttonCorner.Parent = button
-
-    -- Hover effect
-    button.MouseEnter:Connect(function()
-        button.BackgroundColor3 = Color3.fromRGB(80, 80, 100)
-    end)
-
-    button.MouseLeave:Connect(function()
-        button.BackgroundColor3 = Color3.fromRGB(60, 60, 80)
-    end)
-
-    button.MouseButton1Click:Connect(function()
-        callback(button)
-    end)
+    local c = Instance.new("UICorner")
+    c.CornerRadius = UDim.new(0, 10)
+    c.Parent = button
 
     return button
 end
 
-local predictionButton = createToggleButton("Prediction: ON", 45, function(btn)
-    predictionEnabled = not predictionEnabled
-    btn.Text = predictionEnabled and "Prediction: ON" or "Prediction: OFF"
-    btn.BackgroundColor3 = predictionEnabled and Color3.fromRGB(0, 120, 0) or Color3.fromRGB(120, 0, 0)
+local predictionButton = makeButton("🎯  Prediction       ON", 105)
+local homerunButton = makeButton("🏠  Home Run       OFF", 165)
+
+-- TOGGLES
+predictionButton.MouseButton1Click:Connect(function()
+    Prediction = not Prediction
+
+    predictionButton.Text =
+        Prediction and "🎯  Prediction       ON"
+        or "🎯  Prediction       OFF"
+
+    predictionButton.BackgroundColor3 =
+        Prediction and Color3.fromRGB(70, 20, 20)
+        or DARK2
 end)
 
-local homerunButton = createToggleButton("Home Run: OFF", 105, function(btn)
-    homeRunEnabled = not homeRunEnabled
-    btn.Text = homeRunEnabled and "Home Run: ON" or "Home Run: OFF"
-    btn.BackgroundColor3 = homeRunEnabled and Color3.fromRGB(0, 120, 0) or Color3.fromRGB(120, 0, 0)
+homerunButton.MouseButton1Click:Connect(function()
+    HomeRun = not HomeRun
+
+    homerunButton.Text =
+        HomeRun and "🏠  Home Run       ON"
+        or "🏠  Home Run       OFF"
+
+    homerunButton.BackgroundColor3 =
+        HomeRun and Color3.fromRGB(70, 20, 20)
+        or DARK2
 end)
 
--- Set initial button colors
-predictionButton.BackgroundColor3 = Color3.fromRGB(0, 120, 0)
-homerunButton.BackgroundColor3 = Color3.fromRGB(120, 0, 0)
-
--- Close/Open button functionality
-closeButton.MouseButton1Click:Connect(function()
-    guiVisible = not guiVisible
-    frame.Visible = guiVisible
+-- CLOSE / OPEN
+close.MouseButton1Click:Connect(function()
+    main.Visible = false
+    open.Visible = true
 end)
 
--- Toggle GUI with F6 key
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if gameProcessed then return end
-    if input.KeyCode == Enum.KeyCode.F6 then
-        guiVisible = not guiVisible
-        frame.Visible = guiVisible
+open.MouseButton1Click:Connect(function()
+    main.Visible = true
+    open.Visible = false
+end)
+
+-- DRAG MENU
+local dragging = false
+local dragStart
+local startPosition
+
+header.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+    or input.UserInputType == Enum.UserInputType.Touch then
+
+        dragging = true
+        dragStart = input.Position
+        startPosition = main.Position
     end
 end)
 
--- Prediction marker
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+    or input.UserInputType == Enum.UserInputType.Touch then
+
+        dragging = false
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and
+        (input.UserInputType == Enum.UserInputType.MouseMovement
+        or input.UserInputType == Enum.UserInputType.Touch) then
+
+        local delta = input.Position - dragStart
+
+        main.Position = UDim2.new(
+            startPosition.X.Scale,
+            startPosition.X.Offset + delta.X,
+            startPosition.Y.Scale,
+            startPosition.Y.Offset + delta.Y
+        )
+    end
+end)
+
+-- BALL PREDICTION VISUAL
 local marker = Instance.new("Part")
-marker.Name = "BallPrediction"
+marker.Name = "PredictionMarker"
 marker.Shape = Enum.PartType.Ball
-marker.Size = Vector3.new(1, 1, 1)
+marker.Size = Vector3.new(1.5, 1.5, 1.5)
 marker.Anchored = true
 marker.CanCollide = false
-marker.CanQuery = false
 marker.CanTouch = false
-marker.Transparency = 0.25
-marker.Color = Color3.fromRGB(255, 0, 0)
+marker.CanQuery = false
+marker.Material = Enum.Material.Neon
+marker.Color = RED
+marker.Transparency = 1
 marker.Parent = workspace
 
--- Add surface GUI to marker for better visibility
-local surfaceGui = Instance.new("SurfaceGui")
-surfaceGui.Face = Enum.NormalId.Top
-surfaceGui.Parent = marker
-
-local markerLabel = Instance.new("TextLabel")
-markerLabel.Size = UDim2.new(1, 0, 1, 0)
-markerLabel.BackgroundTransparency = 0.3
-markerLabel.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-markerLabel.Text = "BALL"
-markerLabel.TextColor3 = Color3.new(1, 1, 1)
-markerLabel.TextScaled = true
-markerLabel.Font = Enum.Font.GothamBold
-markerLabel.Parent = surfaceGui
-
 RunService.RenderStepped:Connect(function()
-    if not predictionEnabled then
+    if not Prediction then
         marker.Transparency = 1
         return
     end
 
     local ball = workspace:FindFirstChild("Ball")
 
-    if not ball or not ball:IsA("BasePart") then
+    if ball and ball:IsA("BasePart") then
+        marker.Transparency = 0
+
+        local velocity = ball.AssemblyLinearVelocity
+        local predictionTime = 0.35
+
+        marker.Position = ball.Position + velocity * predictionTime
+    else
         marker.Transparency = 1
-        return
     end
-
-    marker.Transparency = 0.25
-
-    -- Predict position using the ball's current velocity.
-    local velocity = ball.AssemblyLinearVelocity
-    local predictionTime = 0.35
-
-    marker.Position = ball.Position + velocity * predictionTime
 end)
 
-print("dylantotitolindo loaded! Press F6 to toggle GUI")
+print("dylantotitolindo loaded! 💀")
